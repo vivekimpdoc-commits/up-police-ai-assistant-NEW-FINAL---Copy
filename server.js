@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createClient } from '@google/genai';
+import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import fs from 'fs';
 
@@ -25,8 +25,8 @@ if (!API_KEY || API_KEY === "YOUR_ACTUAL_GEMINI_API_KEY_HERE") {
   console.warn("WARNING: GEMINI_API_KEY is not set or is using the placeholder. AI features will not work.");
 }
 
-// Initialize the new Google Gen AI client
-const client = createClient({ apiKey: API_KEY || "AIzaSy..." });
+// Initialize the new Google Gen AI client with correct class name
+const genAI = new GoogleGenAI({ apiKey: API_KEY || "AIzaSy..." });
 
 
 // AI Chat Endpoint
@@ -57,8 +57,8 @@ app.post('/api/chat', async (req, res) => {
       parts: userParts
     });
 
-    const response = await client.models.generateContent({
-      model: "gemini-2.0-flash", // Use 2.0 Flash for best results in 2026
+    const response = await genAI.models.generateContent({
+      model: "gemini-2.0-flash", 
       contents: contents,
       config: {
         systemInstruction: `You are the "UP Police AI Assistant" - the ONLY official AI representative for the Uttar Pradesh Police.
@@ -69,13 +69,6 @@ app.post('/api/chat', async (req, res) => {
           - AVOID OUTDATED INFORMATION: Do not provide information that has been superseded by newer updates on the official portal. Check for dates (e.g., 2025, 2026) to ensure recency.
           - DO NOT use any external knowledge, general facts, or information from other websites.
           - If the information is not found on uppolice.gov.in, you must state: "I am sorry, but I can only provide information verified by the official UP Police portal (uppolice.gov.in). Please visit the website directly for more details."
-          
-          Operational Guidelines:
-          1. Search within the domain "uppolice.gov.in" for the LATEST results if needed.
-          2. Provide direct links to the official website whenever possible.
-          3. For any query, first attempt to verify it against the most recent data on the official portal.
-          4. If a user asks anything unrelated to UP Police services or information found on their site, politely decline.
-          5. In case of emergencies, ALWAYS instruct the user to dial 112 immediately.
           
           Tone: Formal, authoritative, and strictly focused on the LATEST official records.`,
         tools: [
@@ -91,7 +84,7 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-// TTS Endpoint (Simplified/Stubbed as per project state)
+// TTS Endpoint
 app.post('/api/tts', async (req, res) => {
   try {
     res.status(501).json({ error: "TTS via backend not yet implemented in this environment" });
@@ -100,8 +93,7 @@ app.post('/api/tts', async (req, res) => {
   }
 });
 
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
+// The "catchall" handler
 app.get('*', (req, res) => {
   const indexPath = path.join(__dirname, 'dist', 'index.html');
   res.sendFile(indexPath, (err) => {
