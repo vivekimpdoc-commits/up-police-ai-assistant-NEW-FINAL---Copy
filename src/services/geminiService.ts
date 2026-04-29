@@ -19,7 +19,8 @@ export async function sendMessage(history: Message[], message: string, imageBase
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      const errorData = await response.json().catch(() => ({}));
+      return errorData.error || "I am having trouble connecting to my knowledge base. Please try again later or visit the official UP Police website.";
     }
 
     const data = await response.json();

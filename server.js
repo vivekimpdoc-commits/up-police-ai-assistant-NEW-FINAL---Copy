@@ -58,7 +58,7 @@ app.post('/api/chat', async (req, res) => {
     });
 
     const response = await genAI.models.generateContent({
-      model: "gemini-2.0-flash", 
+      model: "gemini-1.5-flash", 
       contents: contents,
       config: {
         systemInstruction: `You are the "UP Police AI Assistant" - the ONLY official AI representative for the Uttar Pradesh Police.
@@ -80,6 +80,9 @@ app.post('/api/chat', async (req, res) => {
     res.json({ text: response.text });
   } catch (error) {
     console.error("AI Error:", error);
+    if (error.status === 429 || (error.message && error.message.includes("quota"))) {
+      return res.status(429).json({ error: "The AI is currently receiving too many requests. Please wait a few seconds and try again." });
+    }
     res.status(500).json({ error: "Failed to process AI request" });
   }
 });
