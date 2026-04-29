@@ -1,8 +1,9 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from 'dotenv';
+import fs from 'fs';
 
 dotenv.config();
 
@@ -24,7 +25,7 @@ if (!API_KEY || API_KEY === "YOUR_ACTUAL_GEMINI_API_KEY_HERE") {
   console.warn("WARNING: GEMINI_API_KEY is not set or is using the placeholder. AI features will not work.");
 }
 
-const genAI = new GoogleGenAI(API_KEY || "AIzaSy..."); // Placeholder to prevent crash, but warn user
+const genAI = new GoogleGenerativeAI(API_KEY || "AIzaSy..."); // Placeholder to prevent crash, but warn user
 
 
 // AI Chat Endpoint
@@ -104,10 +105,20 @@ app.post('/api/tts', async (req, res) => {
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  const indexPath = path.join(__dirname, 'dist', 'index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error("Error sending index.html:", err);
+      res.status(500).send("The application build (dist/index.html) is missing. Please run 'npm run build' before starting the server.");
+    }
+  });
 });
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  const distPath = path.join(__dirname, 'dist');
+  if (!fs.existsSync(distPath)) {
+     console.warn("WARNING: 'dist' directory not found. Ensure you have run 'npm run build'.");
+  }
 });
 
