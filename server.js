@@ -110,7 +110,7 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT} [v2.1.0-2026-04-29]`);
   const distPath = path.join(__dirname, 'dist');
   if (!fs.existsSync(distPath)) {
      console.warn("WARNING: 'dist' directory not found. Ensure you have run 'npm run build'.");
