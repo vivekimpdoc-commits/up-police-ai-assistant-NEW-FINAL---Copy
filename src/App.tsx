@@ -96,11 +96,19 @@ export default function App() {
     }
   };
 
-  const speakMessage = async (text: string) => {
-    const audioData = await generateSpeech(text);
-    if (audioData) {
-      const audio = new Audio(`data:audio/mp3;base64,${audioData}`);
-      audio.play();
+  const speakMessage = (text: string) => {
+    if ('speechSynthesis' in window) {
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = language === 'EN' ? 'en-US' : 'hi-IN';
+      utterance.rate = 0.9;
+      utterance.pitch = 1.0;
+      
+      window.speechSynthesis.speak(utterance);
+    } else {
+      console.error('Speech synthesis not supported in this browser');
     }
   };
 
