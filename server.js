@@ -69,9 +69,6 @@ app.post('/api/chat', async (req, res) => {
         systemInstruction: `You are the "UP Police AI Assistant". 
           Rule: ONLY use data from uppolice.gov.in. Be FAST and CONCISE. 
           If information is missing, provide the official link immediately.`,
-        tools: [
-          { googleSearch: {} }
-        ],
         maxOutputTokens: 800,
         temperature: 0.1,
       }
