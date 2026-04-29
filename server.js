@@ -36,8 +36,11 @@ app.post('/api/chat', async (req, res) => {
   try {
     const { history, message, imageBase64 } = req.body;
     
+    // Limit history to the last 10 messages to save tokens and stay within quota
+    const recentHistory = history.slice(-10);
+    
     // Formatting history for the new SDK
-    const contents = history.map((msg) => ({
+    const contents = recentHistory.map((msg) => ({
       role: msg.role === 'model' ? 'model' : 'user',
       parts: [{ text: msg.text }],
     }));
@@ -60,7 +63,7 @@ app.post('/api/chat', async (req, res) => {
     });
 
     const response = await genAI.models.generateContent({
-      model: "gemini-2.0-flash", 
+      model: "gemini-2.5-flash-lite", 
       contents: contents,
       config: {
         systemInstruction: `You are the "UP Police AI Assistant" - the ONLY official AI representative for the Uttar Pradesh Police.
