@@ -1,0 +1,5 @@
+{
+  "name": "UP Police AI Assistant",
+  "description": "An AI-powered chatbot providing information and assistance based on the official Uttar Pradesh Police website.",
+  "requestFramePermissions": []
+}
