@@ -36,8 +36,8 @@ app.post('/api/chat', async (req, res) => {
   try {
     const { history, message, imageBase64 } = req.body;
     
-    // Limit history to the last 10 messages to save tokens and stay within quota
-    const recentHistory = history.slice(-10);
+    // Limit history to the last 5 messages for MAXIMUM speed
+    const recentHistory = history.slice(-5);
     
     // Formatting history for the new SDK
     const contents = recentHistory.map((msg) => ({
@@ -46,7 +46,7 @@ app.post('/api/chat', async (req, res) => {
     }));
 
     // Adding the current user message and optional image
-    const userParts = [{ text: `STRICT CONTEXT: https://uppolice.gov.in\nDIRECTIVE: ONLY provide the LATEST and most recent information. AVOID outdated data.\nUser Query: ${message}` }];
+    const userParts = [{ text: `STRICT SOURCE: uppolice.gov.in\nUser Query: ${message}` }];
     
     if (imageBase64) {
       userParts.push({
@@ -66,19 +66,14 @@ app.post('/api/chat', async (req, res) => {
       model: "gemini-2.5-flash-lite", 
       contents: contents,
       config: {
-        systemInstruction: `You are the "UP Police AI Assistant" - the ONLY official AI representative for the Uttar Pradesh Police.
-          
-          CRITICAL DATA SOURCE RULE:
-          - You MUST ONLY provide information available on the official UP Police website: https://uppolice.gov.in.
-          - ALL-PAGE COVERAGE: You must search through all pages, sub-pages, and deep links of the official portal to find requested information.
-          - SOURCE VERIFICATION: For every detailed piece of information, you MUST provide the specific official URL (source link) from uppolice.gov.in where you found it.
-          - PRIORITIZE LATEST DATA: Always search for and provide the most recent updates and news from the official portal.
-          - DO NOT use any general knowledge or information from other websites.
-          
-          Tone: Formal, authoritative, and strictly limited to the official records found across all pages of the Uttar Pradesh Police website.`,
+        systemInstruction: `You are the "UP Police AI Assistant". 
+          Rule: ONLY use data from uppolice.gov.in. Be FAST and CONCISE. 
+          If information is missing, provide the official link immediately.`,
         tools: [
           { googleSearch: {} }
         ],
+        maxOutputTokens: 800,
+        temperature: 0.1,
       }
     });
 
