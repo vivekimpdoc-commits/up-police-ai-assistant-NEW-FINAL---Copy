@@ -26,7 +26,7 @@ app.post('/api/chat', async (req, res) => {
     const { history, message, imageBase64 } = req.body;
     
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash", // Using stable model for reliability
+      model: "gemini-1.5-flash",
       systemInstruction: `You are the "UP Police AI Assistant" - the ONLY official AI representative for the Uttar Pradesh Police.
         
         STRICT INFORMATION SOURCE & RECENCY RULE:
@@ -44,6 +44,9 @@ app.post('/api/chat', async (req, res) => {
         5. In case of emergencies, ALWAYS instruct the user to dial 112 immediately.
         
         Tone: Formal, authoritative, and strictly focused on the LATEST official records.`,
+      tools: [
+        { googleSearch: {} }
+      ],
     });
 
     const chat = model.startChat({
@@ -61,8 +64,9 @@ app.post('/api/chat', async (req, res) => {
           data: imageBase64.split(',')[1],
           mimeType: "image/png"
         }
-      } as any);
+      });
     }
+
 
     const result = await chat.sendMessage(parts);
     const response = await result.response;
