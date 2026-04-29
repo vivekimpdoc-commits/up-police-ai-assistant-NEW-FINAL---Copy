@@ -60,7 +60,7 @@ app.post('/api/chat', async (req, res) => {
     });
 
     const response = await genAI.models.generateContent({
-      model: "gemini-1.5-flash", 
+      model: "gemini-2.0-flash", 
       contents: contents,
       config: {
         systemInstruction: `You are the "UP Police AI Assistant" - the ONLY official AI representative for the Uttar Pradesh Police.
