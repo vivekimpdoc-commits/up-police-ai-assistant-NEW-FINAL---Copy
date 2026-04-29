@@ -63,7 +63,7 @@ app.post('/api/chat', async (req, res) => {
     });
 
     const response = await genAI.models.generateContent({
-      model: "gemini-2.5-flash-lite", 
+      model: "gemini-1.5-flash-8b", 
       contents: contents,
       config: {
         systemInstruction: `You are the "UP Police AI Assistant". 
