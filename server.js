@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import fs from 'fs';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(cors());
 // Increase JSON payload limit for base64 images
 app.use(express.json({ limit: '50mb' }));
 

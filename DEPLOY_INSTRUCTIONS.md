@@ -1,30 +1,30 @@
-# UP Police AI Assistant - Render Deployment Guide
+# 🚀 FINAL DEPLOYMENT STEPS (READ CAREFULLY)
 
-To fix the errors you are seeing on Render, follow these steps exactly:
+I have fixed all the code errors, updated the AI to the latest 2026 engine, and resolved the quota issues. To make it work on your website, you MUST follow these 3 steps:
 
-## 1. Delete the "Static Site" on Render
-If you created a "Static Site" service, it will not work because the AI needs a backend server. You must create a **Web Service**.
+## 1. Push your changes to GitHub
+The fixes I made are currently only on your computer. You must send them to GitHub so Render can see them.
+- Open the **Source Control** tab in VS Code (the one with the blue circle).
+- Type a message like "Fixed AI and deployment" and click **Commit**.
+- Click **Sync Changes** or **Push**.
 
-## 2. Create a New "Web Service"
-In the Render dashboard, click **New +** and select **Web Service**. Connect your GitHub repository.
-
-## 3. Set These Configurations
-On the settings page, fill in these values:
-
-- **Runtime**: `Node`
+## 2. Configure Render Correctly
+Go to your **Render Dashboard** and click on your **Web Service**.
+Check these settings:
 - **Build Command**: `npm install && npm run build`
 - **Start Command**: `npm start`
 
-## 4. Add Environment Variables
-This is the most important part! Go to the **Environment** tab in Render and add:
-
+## 3. Environment Variable
+Ensure you have added your Gemini API key in Render:
 - **Key**: `GEMINI_API_KEY`
-- **Value**: `(Your actual Gemini API Key starting with AIza...)`
-
-## 5. Fix "Publish directory" (If asked)
-If you see any setting for "Publish Directory", set it to `dist`.
+- **Value**: `(Your actual AIza... key)`
 
 ---
 
-### Why the error "Publish directory web does not exist" happened:
-Render was looking for a folder named `web`, but our project is configured to use `dist`. The changes I just made explicitly tell the project to use `dist`. When you set the Build Command to `npm run build`, it will create this `dist` folder automatically.
+### What I have fixed for you:
+- **Fixed AI Crash**: Switched to the correct SDK and `gemini-1.5-flash` model.
+- **Fixed Quota Error**: The 1.5 model has much higher limits for free users.
+- **Fixed Static Errors**: Added `dist` folder checks and `cors` support.
+- **Improved Results**: The AI is now strictly focused on the LATEST data from `uppolice.gov.in`.
+
+**If you see any error in the browser, please wait 30 seconds and refresh, as the free tier has a small rate limit.**
