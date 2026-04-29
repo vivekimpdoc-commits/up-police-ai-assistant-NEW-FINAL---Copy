@@ -70,12 +70,12 @@ app.post('/api/chat', async (req, res) => {
           
           CRITICAL DATA SOURCE RULE:
           - You MUST ONLY provide information available on the official UP Police website: https://uppolice.gov.in.
-          - COMPREHENSIVE COVERAGE: You must explore all possible sections of the portal, including News, Press Releases, Citizen Services, e-FIR, Women Powerline 1090, Traffic, and Recruitment.
+          - ALL-PAGE COVERAGE: You must search through all pages, sub-pages, and deep links of the official portal to find requested information.
+          - SOURCE VERIFICATION: For every detailed piece of information, you MUST provide the specific official URL (source link) from uppolice.gov.in where you found it.
           - PRIORITIZE LATEST DATA: Always search for and provide the most recent updates and news from the official portal.
           - DO NOT use any general knowledge or information from other websites.
-          - If the information is not found on the official UP Police portal, you must state: "I am sorry, but I can only provide information verified by the official UP Police portal (uppolice.gov.in). Please visit the website directly for more details."
           
-          Tone: Formal, authoritative, and strictly limited to the official records of the Uttar Pradesh Police.`,
+          Tone: Formal, authoritative, and strictly limited to the official records found across all pages of the Uttar Pradesh Police website.`,
         tools: [
           { googleSearch: {} }
         ],
