@@ -12,7 +12,12 @@ export default defineConfig(({mode}) => {
         '@': path.resolve(__dirname, '.'),
       },
     },
+    build: {
+      outDir: 'dist',
+      emptyOutDir: true,
+    },
     server: {
+
       proxy: {
         '/api': {
           target: 'http://localhost:5000',
